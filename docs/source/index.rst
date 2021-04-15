@@ -6,8 +6,11 @@
 Welcome to Finance app's documentation!
 =======================================
 
-.. automodule:: src.application
+.. automodule:: application
    :members:
+   :private-members:
+   :undoc-members:
+   :show-inheritance:
 
 .. toctree::
    :maxdepth: 2
