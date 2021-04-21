@@ -1,6 +1,14 @@
 """Base window of application."""
 import tkinter as tk
+import gettext
+import locale
+
 from tkinter import font
+
+locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
+localedir = gettext.find('Months')
+localedir = localedir if localedir is not None else '.'
+gettext.install('Months', localedir, names=('ngettext', ))
 
 
 class Application(tk.Frame):
@@ -43,8 +51,8 @@ class Application(tk.Frame):
         self.months_frame = tk.Frame(self, borderwidth=5, bg='#3e3362')
         self.months_frame.grid(row=0, column=0, sticky=tk.NSEW)
 
-        self.months_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-                             'October', 'November', 'December']
+        self.months_names = [_('January'), _('February'), _('March'), _('April'), _('May'), _('June'), _('July'),
+                             _('August'), _('September'), _('October'), _('November'), _('December')]
 
         self.months_buttons_list = []
         for i in range(12):
@@ -62,5 +70,5 @@ class Application(tk.Frame):
 
 if __name__ == '__main__':
     root = tk.Tk()
-    app = Application(root, 'Finance management app')
+    app = Application(root, _('Finance management app'))
     app.mainloop()
