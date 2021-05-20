@@ -4,6 +4,7 @@ import gettext
 import locale
 
 from tkinter import font
+from group_storage import GroupStorage
 
 locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
 localedir = gettext.find('Months')
@@ -27,12 +28,10 @@ class Application(tk.Frame):
         self.font = font.Font(font=('Lucida Sans', 12, 'normal'))
 
         self._create_widgets()
-
+        self.grid(sticky=tk.NSEW, row=0, column=0)
         self._config_widget(self.master)
-        self.grid(sticky=tk.NSEW)
-        self.rowconfigure(0, weight=1)
-        self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=5)
+        self._config_widget(self)
+
 
     @staticmethod
     def _config_widget(widget):
@@ -49,7 +48,7 @@ class Application(tk.Frame):
     def _create_widgets(self):
         """Create all basic widgets of the main window."""
         self.months_frame = tk.Frame(self, borderwidth=5, bg='#3e3362')
-        self.months_frame.grid(row=0, column=0, sticky=tk.NSEW)
+        self.months_frame.grid(sticky=tk.NSEW, row=0, column=0, columnspan=1)
 
         self.months_names = [_('January'), _('February'), _('March'), _('April'), _('May'), _('June'), _('July'),
                              _('August'), _('September'), _('October'), _('November'), _('December')]
@@ -63,9 +62,10 @@ class Application(tk.Frame):
             self.months_buttons_list.append(month_button)
 
         self.groups_frame = tk.Frame(self, borderwidth=5, bg='#e2ddec')
-        self.groups_frame.grid(row=0, column=1, sticky=tk.NSEW)
-        self._config_widget(self.groups_frame)
+        self.groups_frame.grid(sticky=tk.NSEW, row=0, column=1, columnspan=4)
         self._config_widget(self.months_frame)
+        self.storage = GroupStorage(self.groups_frame)
+        self._config_widget(self.groups_frame)
 
 
 if __name__ == '__main__':
