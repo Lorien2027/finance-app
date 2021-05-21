@@ -78,9 +78,11 @@ class GroupStorage(tk.Frame):
 
     def _create_category(self, event):
         if not self.control_widget.validate('category'):
+            self.control_widget.validate_error('category', message='Invalid category name')
             return
+        text = self.control_widget.validate_success('category')
         button = Button(self.main_window, os.path.join('images', 'category_window.png'), self.create_button.position,
-                        text=self.control_widget.get('category'))
+                        text=text)
         button.widget.bind("<Configure>", self._resize_callback(button))
         self.create_button.change_position(self.last_pos)
         self._change_last_pos()

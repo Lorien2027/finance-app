@@ -1,5 +1,6 @@
 import tkinter as tk
 import os
+import tkinter.messagebox
 from tkinter import font, Canvas, StringVar
 from PIL import Image, ImageTk
 
@@ -40,18 +41,35 @@ class ControlWindow:
         self.font = font.Font(font=('Lucida Sans', 12, 'normal'))
         for name, text in zip(('category', 'amount', 'desc', 'subcategory'),
                               ('Category:', 'Amount:', 'Description:', 'Subcategory')):
-            label = tk.Label(master, text=text, font=self.font, bg='#e2ddec', relief='flat', highlightthickness=0)
+            label = tk.Label(master, text=text, font=self.font, bg='#e2ddec', relief='flat')
             label.pack(side=tk.LEFT, fill="both")
             var = StringVar()
-            widget = tk.Entry(master, textvariable=var, highlightthickness=0)
+            widget = tk.Entry(master, textvariable=var, relief='groove', highlightthickness=0)
             widget.pack(side=tk.LEFT, fill="both")
             self.widgets[name] = {'widget': widget, 'label': label, 'var': var}
-
 
     def validate(self, name):
         value = self.widgets[name]['var'].get()
         if name == 'category':
-            return str.isprintable(value) and len(value)
+            return str.isprintable(value) and len(value.split())
+
+    def validate_error(self, name, message=None):
+        widget = self.widgets[name]['widget']
+        widget.config(highlightthickness=3)
+        widget.config(highlightcolor='#3e3362')
+        widget.focus_set()
+        widget.update()
+        if message:
+            tk.messagebox.showwarning('Error', message)
+
+    def validate_success(self, name):
+        widget = self.widgets[name]['widget']
+        widget.config(highlightthickness=0)
+        widget.master.focus_set()
+        var = self.widgets[name]['var']
+        value = var.get()
+        var.set('')
+        return value
 
     def get(self, name):
         return self.widgets[name]['var'].get()
