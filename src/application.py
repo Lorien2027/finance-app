@@ -5,6 +5,7 @@ import locale
 
 from tkinter import font
 from group_storage import GroupStorage
+from utils import config_widget
 
 locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
 localedir = gettext.find('Months')
@@ -26,24 +27,10 @@ class Application(tk.Frame):
         self.master.title(title)
         self.master.minsize(width=1000, height=600)
         self.font = font.Font(font=('Lucida Sans', 12, 'normal'))
-
         self._create_widgets()
         self.grid(sticky=tk.NSEW, row=0, column=0)
-        self._config_widget(self.master)
-        self._config_widget(self)
-
-
-    @staticmethod
-    def _config_widget(widget):
-        """
-        Configure the columns and rows of the widget grid.
-
-        :param widget: tk.Frame
-        """
-        for column in range(widget.grid_size()[0]):
-            widget.columnconfigure(column, weight=1)
-        for row in range(widget.grid_size()[1]):
-            widget.rowconfigure(row, weight=1)
+        config_widget(self.master)
+        config_widget(self)
 
     def _create_widgets(self):
         """Create all basic widgets of the main window."""
@@ -63,9 +50,9 @@ class Application(tk.Frame):
 
         self.groups_frame = tk.Frame(self, borderwidth=5, bg='#e2ddec')
         self.groups_frame.grid(sticky=tk.NSEW, row=0, column=1, columnspan=4)
-        self._config_widget(self.months_frame)
+        config_widget(self.months_frame)
         self.storage = GroupStorage(self.groups_frame)
-        self._config_widget(self.groups_frame)
+        config_widget(self.groups_frame)
 
 
 if __name__ == '__main__':
