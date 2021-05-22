@@ -173,17 +173,17 @@ class InformationWindow:
         config_widget(self.control_frame)
         config_widget(self.information_frame)
 
-    def update_list(self, fields, delete=False):
+    def update_list(self, fields, delete_list=False):
         if isinstance(fields, dict):
             fields = [fields]
         for name in self.list_widgets:
             widget = self.list_widgets[name]
-            if delete:
+            if delete_list:
                 widget['widget'].delete(0, tk.END)
                 widget['length'] = 0
-            value = ''.join([f'{i}: {field[name]}\n' for i, field in enumerate(fields, start=widget['length'])])
-            widget['length'] += len(value)
-            widget['widget'].insert(tk.END, value)
+            for idx, field in enumerate(fields, start=widget['length']):
+                widget['widget'].insert(tk.END, f'{idx}: {field[name]}')
+            widget['length'] += len(fields)
 
     def bind(self, button_name, bind_name, callback):
         self.control_widgets[button_name]['widget'].bind(bind_name, callback)

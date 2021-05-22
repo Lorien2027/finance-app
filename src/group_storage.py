@@ -41,7 +41,7 @@ class GroupStorage(tk.Frame):
     def _set_active(self, button):
         def config(event):
             self.information_window.bind('add', '<Button-1>', self._update_category(button.position))
-            self.information_window.update_list(self.categories[button.position].fields)
+            self.information_window.update_list(self.categories[button.position].fields, delete_list=True)
         return config
 
     def _update_category(self, button_id):
