@@ -58,6 +58,10 @@ class ControlWindow:
         widget.focus_set()
         widget.update()
 
+    def remove_window_focus(self):
+        for name in self.widgets:
+            self._remove_focus(name)
+
     def _remove_focus(self, name, *args):
         widget = self.widgets[name]['widget']
         widget.config(highlightthickness=0)
@@ -152,8 +156,8 @@ class InformationWindow:
                                       bg='#e2ddec', relief='flat', state=state)
         self.control_label.grid(row=0, column=0)
         self.control_widgets = {}
-        for i, (name, text) in enumerate(zip(('add', 'change', 'remove', 'delete'),
-                                             ('Add field', 'Change field', 'Remove field', 'Detele Category'))):
+        for i, (name, text) in enumerate(zip(('add', 'remove', 'change','delete'),
+                                             ('Add field', 'Remove field', 'Change field', 'Delete category'))):
             widget = tk.Button(self.control_frame, text=text, font=self.label_font, highlightbackground='#e2ddec',
                                relief='solid', width=10, state=state)
             widget.grid(row=i+1, column=0)
@@ -165,13 +169,40 @@ class InformationWindow:
                              relief='flat', state=state)
             label.grid(row=0, column=i)
             widget = tk.Listbox(self.information_frame,  relief='solid', highlightthickness=0, bg='#f0f4f9',
-                                font=self.widget_font, width=25, height=5, state=state)
+                                font=self.widget_font, width=25, height=5, state=state, selectmode=tk.BROWSE,
+                                exportselection=False)
             widget.grid(row=1, column=i, padx=5, pady=5)
+            widget.bind("<<ListboxSelect>>", self._select_row)
             self.list_widgets[name] = {'widget': widget, 'label': label, 'length': 0}
 
         config_widget(master)
         config_widget(self.control_frame)
         config_widget(self.information_frame)
+
+    def _select_row(self, event):
+        selection = event.widget.curselection()
+        if selection:
+            for name in self.list_widgets:
+                widget = self.list_widgets[name]['widget']
+                index = widget.curselection()
+                if not index or index != selection[0]:
+                    self.list_widgets[name]['widget'].select_clear(0, 'end')
+                    self.list_widgets[name]['widget'].select_set(selection[0])
+
+    def get_selected_index(self):
+        for name in self.list_widgets:
+            widget = self.list_widgets[name]['widget']
+            selection = widget.curselection()
+            if not selection:
+                return None
+            else:
+                return selection[0]
+
+    def change_index_field(self, index, field):
+        for name in self.list_widgets:
+            widget = self.list_widgets[name]['widget']
+            widget.delete(index)
+            widget.insert(index, f'{index}: {field[name]}')
 
     def update_list(self, fields, delete_list=False):
         if isinstance(fields, dict):
@@ -205,11 +236,14 @@ class Category:
     def create_field(self, amount, date, description, subcategory):
         self.fields.append({'amount': amount, 'date': date, 'description': description, 'subcategory': subcategory})
 
-    def _modify_field(self, index, amount=None, date=None, description=None, subcategory=None):
+    def delete_field(self, index):
+        del self.fields[index]
+
+    def change_field(self, index, amount=None, date=None, description=None, subcategory=None):
         if index >= len(self.fields):
             return
         for key, value in zip(('amount',  'date', 'description', 'subcategory'),
-                              (amount, description, date, subcategory)):
+                              (amount, date, description, subcategory)):
             if value is not None:
                 self.fields[index][key] = value
 
