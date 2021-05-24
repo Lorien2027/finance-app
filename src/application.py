@@ -2,12 +2,14 @@
 import tkinter as tk
 import gettext
 import locale
+import platform
 
 from tkinter import font
 from group_storage import GroupStorage
 from utils import config_widget
 
-locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
+if platform.system() != 'Windows':
+    locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
 localedir = gettext.find('Months')
 localedir = localedir if localedir is not None else '.'
 gettext.install('Months', localedir, names=('ngettext', ))

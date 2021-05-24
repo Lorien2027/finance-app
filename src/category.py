@@ -156,7 +156,7 @@ class InformationWindow:
                                       bg='#e2ddec', relief='flat', state=state)
         self.control_label.grid(row=0, column=0)
         self.control_widgets = {}
-        for i, (name, text) in enumerate(zip(('add', 'remove', 'change','delete'),
+        for i, (name, text) in enumerate(zip(('add', 'remove', 'change', 'delete'),
                                              ('Add field', 'Remove field', 'Change field', 'Delete category'))):
             widget = tk.Button(self.control_frame, text=text, font=self.label_font, highlightbackground='#e2ddec',
                                relief='solid', width=10, state=state)
