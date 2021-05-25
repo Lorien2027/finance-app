@@ -42,19 +42,29 @@ class Application(tk.Frame):
         self.months_names = [_('January'), _('February'), _('March'), _('April'), _('May'), _('June'), _('July'),
                              _('August'), _('September'), _('October'), _('November'), _('December')]
 
-        self.months_buttons_list = []
+        self.months_buttons = {}
         for i in range(12):
             month_button = tk.Button(self.months_frame, text=self.months_names[i], font=self.font, bg='#f0f4f9',
                                      relief='flat', height=2, width=12, border=5)
             month_button.grid(row=i, column=0, sticky=tk.NSEW, padx=3, pady=3)
-            month_button.configure(command=lambda obj=month_button: None)
-            self.months_buttons_list.append(month_button)
+            month_button.configure(command=lambda obj=month_button: self._change_month(obj))
+            self.months_buttons[i] = month_button
 
         self.groups_frame = tk.Frame(self, borderwidth=5, bg='#e2ddec')
         self.groups_frame.grid(sticky=tk.NSEW, row=0, column=1, columnspan=4)
         config_widget(self.months_frame)
-        self.storage = GroupStorage(self.groups_frame)
-        config_widget(self.groups_frame)
+
+        self.months_groups = {}
+        for month in range(12):
+            self.months_groups[month] = GroupStorage(self.groups_frame)
+            config_widget(self.months_groups[month])
+        self.current_month = 0
+        self.months_groups[self.current_month].tkraise()
+
+    def _change_month(self, button):
+        month = button.grid_info()['row']
+        print(month)
+        self.months_groups[self.current_month].tkraise()
 
 
 if __name__ == '__main__':
