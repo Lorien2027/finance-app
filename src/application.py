@@ -58,6 +58,7 @@ class Application(tk.Frame):
         for month in range(12):
             self.months_groups[month] = GroupStorage(self.groups_frame)
             config_widget(self.months_groups[month])
+        config_widget(self.groups_frame)
         self.current_month = 0
         self._change_month(self.months_buttons[self.current_month])
 
