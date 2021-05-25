@@ -59,11 +59,11 @@ class Application(tk.Frame):
             self.months_groups[month] = GroupStorage(self.groups_frame)
             config_widget(self.months_groups[month])
         self.current_month = 0
-        self.months_groups[self.current_month].tkraise()
+        self._change_month(self.months_buttons[self.current_month])
 
     def _change_month(self, button):
         month = button.grid_info()['row']
-        print(month)
+        self.current_month = month
         self.months_groups[self.current_month].tkraise()
 
 
