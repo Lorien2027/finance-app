@@ -5,11 +5,12 @@ from category import Category, ControlWindow, CategoryWindow, InformationWindow
 
 
 class GroupStorage(tk.Frame):
-    def __init__(self, master=None, grid_shape=(6, 4)):
+    def __init__(self, master=None, grid_shape=(2, 2)):
         super().__init__(master=master, relief='ridge', bg='#e2ddec', takefocus=1)
         self.font = font.Font(font=('Lucida Sans', 12, 'normal'))
         self.grid_shape = grid_shape
         self.categories = {}
+        self.active_category = None
         self.control_frame = tk.Frame(self, relief='ridge', bg='#e2ddec', takefocus=1)
         self.category_frame = tk.Frame(self, relief='ridge', bg='#e2ddec', takefocus=1)
         self.information_frame = tk.Frame(self, relief='ridge', bg='#e2ddec', takefocus=1)
@@ -37,18 +38,25 @@ class GroupStorage(tk.Frame):
 
         create_button = self.category_window.create_button
         create_button.widget.tag_bind(create_button.widget_image, '<Button-1>', self._create_category)
-        self.category_window.bind('<Button-1>', self._set_active)
 
     def _set_active(self, button):
         def config(event):
-            self.information_window_init(button.position)
+            self.active_category = button.position
+            self.information_window_bind(button.position)
             self.information_window.update_list(self.categories[button.position].fields, delete_list=True)
         return config
 
-    def information_window_init(self, button_id):
+    def information_window_bind(self, button_id):
         self.information_window.bind('add', '<Button-1>', self._update_category(button_id))
         self.information_window.bind('remove', '<Button-1>', self._remove_category_field(button_id))
         self.information_window.bind('change', '<Button-1>', self._change_category_field(button_id))
+        self.information_window.bind('delete', '<Button-1>', self._delete_category)
+
+    def information_window_unbind(self):
+        self.information_window.unbind('add', '<Button-1>')
+        self.information_window.unbind('remove', '<Button-1>')
+        self.information_window.unbind('change', '<Button-1>')
+        self.information_window.unbind('delete', '<Button-1>')
 
     def _change_category_field(self, button_id):
         def change(event):
@@ -100,8 +108,37 @@ class GroupStorage(tk.Frame):
         category = Category(last_pos)
         self.categories[last_pos] = category
         self.category_window.show_category(text)
+        self.category_window.bind(last_pos, '<Button-1>', self._set_active)
         self.control_window.set_state('normal')
         self.information_window.set_state('normal')
-        self.information_window_init(last_pos)
+        self.information_window_bind(last_pos)
+        self.information_window.update_list([], delete_list=True)
+        self.active_category = last_pos
         self.update_idletasks()
         self.update()
+
+    def _delete_category(self, event):
+        if not self.active_category:
+            return
+        del self.categories[self.active_category]
+        self.information_window.update_list([], delete_list=True)
+        if len(self.categories):
+            self.information_window_bind((0, 0))
+            new_categories = {}
+            for button_id, category in self.categories.items():
+                if (button_id[0] >= self.active_category[0] and button_id[1] >= self.active_category[1]
+                        and (button_id[0] or button_id[1])):
+                    button_id = list(button_id)
+                    button_id[0] -= button_id[0] and not button_id[1]
+                    button_id[1] = (button_id[1] - 1) % self.grid_shape[1]
+                new_categories[tuple(button_id)] = category
+            self.categories = new_categories
+        else:
+            self.information_window_unbind()
+            self.control_window.set_state('disable')
+            self.information_window.set_state('disable')
+        create_button_bind = self.category_window.delete_category(self.active_category)
+        if create_button_bind:
+            create_button = self.category_window.create_button
+            create_button.widget.tag_bind(create_button.widget_image, '<Button-1>', self._create_category)
+        self.active_category = (0, 0)

@@ -20,7 +20,7 @@ class ControlWindow:
                              state=state)
             label.pack(side=tk.LEFT, fill='both', expand=True)
             var = StringVar()
-            widget = tk.Entry(master, textvariable=var, relief='groove', highlightthickness=0,
+            widget = tk.Entry(master, textvariable=var, relief='groove', highlightthickness=3, highlightcolor='#e2ddec',
                               width=14, font=self.widget_font, state=state)
             widget.pack(side=tk.LEFT, fill='both', expand=True)
             widget.bind('<FocusOut>', partial(self._remove_focus, name))
@@ -64,8 +64,10 @@ class ControlWindow:
 
     def _remove_focus(self, name, *args):
         widget = self.widgets[name]['widget']
-        widget.config(highlightthickness=0)
+        widget.config(highlightthickness=3)
+        widget.config(highlightcolor='#e2ddec')
         widget.master.focus_set()
+        widget.update()
 
     def validate_success(self, name):
         self._remove_focus(name)
@@ -79,6 +81,8 @@ class ControlWindow:
 
     def set_state(self, state):
         for name in self.widgets:
+            if name == 'category':
+                continue
             for widget_name, widget in self.widgets[name].items():
                 if widget_name != 'var':
                     widget.config(state=state)
@@ -89,6 +93,7 @@ class CategoryWindow:
     def __init__(self, master, grid_shape):
         self.grid_shape = grid_shape
         self.last_pos = (0, 0)
+        self.button_names = []
         self.create_image = Image.open(os.path.join('images', 'create_button.png'))
         self.button_image = Image.open(os.path.join('images', 'category_window.png'))
         self.buttons = {}
@@ -103,22 +108,44 @@ class CategoryWindow:
 
     def show_category(self, text):
         button = self.buttons[self.last_pos]
-        button.set_state('normal')
-        button.change_text(text)
         self._change_last_pos()
-        self.create_button.change_position(self.last_pos)
+        if self.last_pos[0] != self.grid_shape[0]:
+            self.create_button.change_position(self.last_pos)
+        else:
+            self.create_button.widget.grid_forget()
+            self.create_button.set_state('hidden')
+            self.create_button.widget.tag_unbind(self.create_button.widget_image, '<Button-1>')
+        button.change_text(text)
+        self.button_names.append(text)
+        button.set_state('normal')
 
-    def bind(self, name, callback):
-        for ypos in range(self.grid_shape[0]):
-            for xpos in range(self.grid_shape[1]):
-                button = self.buttons[(ypos, xpos)]
-                button.widget.bind(name, callback(button))
+    def delete_category(self, button_id):
+        self._change_last_pos(increase=False)
+        self.buttons[self.last_pos].set_state('hidden')
+        last_index = self.grid_shape[0] * button_id[0] + button_id[1]
+        self.create_button.change_position(self.last_pos)
+        for index, text in enumerate(self.button_names[last_index+1:], start=last_index):
+            button = self.buttons[(index // self.grid_shape[0], index % self.grid_shape[1])]
+            button.change_text(text)
+        del self.button_names[last_index]
+        if self.last_pos[0] == self.grid_shape[0] - 1 and self.last_pos[1] == self.grid_shape[1] - 1:
+            self.create_button.set_state('normal')
+            return True
+        else:
+            return False
+
+    def bind(self, button_id, name, callback):
+        button = self.buttons[button_id]
+        button.widget.bind(name, callback(button))
 
     def _change_last_pos(self, increase=True):
         last_pos = list(self.last_pos)
         if increase:
             last_pos[0] += (last_pos[1] == self.grid_shape[1] - 1)
             last_pos[1] = (last_pos[1] + 1) % self.grid_shape[1]
+        elif last_pos[0] or last_pos[1]:
+            last_pos[0] -= last_pos[0] and not last_pos[1]
+            last_pos[1] = (last_pos[1] - 1) % self.grid_shape[1]
         self.last_pos = tuple(last_pos)
 
     def _resize_create_callback(self, event):
@@ -156,7 +183,7 @@ class InformationWindow:
                                       bg='#e2ddec', relief='flat', state=state)
         self.control_label.grid(row=0, column=0)
         self.control_widgets = {}
-        for i, (name, text) in enumerate(zip(('add', 'remove', 'change','delete'),
+        for i, (name, text) in enumerate(zip(('add', 'remove', 'change', 'delete'),
                                              ('Add field', 'Remove field', 'Change field', 'Delete category'))):
             widget = tk.Button(self.control_frame, text=text, font=self.label_font, highlightbackground='#e2ddec',
                                relief='solid', width=10, state=state)
@@ -218,6 +245,9 @@ class InformationWindow:
 
     def bind(self, button_name, bind_name, callback):
         self.control_widgets[button_name]['widget'].bind(bind_name, callback)
+
+    def unbind(self, button_name, bind_name):
+        self.control_widgets[button_name]['widget'].unbind(bind_name)
 
     def set_state(self, state):
         for widgets in (self.list_widgets, self.control_widgets):
