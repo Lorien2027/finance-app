@@ -62,8 +62,7 @@ class Application(tk.Frame):
         self._change_month(self.months_buttons[self.current_month])
 
     def _change_month(self, button):
-        month = button.grid_info()['row']
-        self.current_month = month
+        self.current_month = button.grid_info()['row']
         self.months_groups[self.current_month].tkraise()
 
 
