@@ -108,7 +108,7 @@ class GroupStorage(tk.Frame):
         category = Category(last_pos)
         self.categories[last_pos] = category
         self.category_window.show_category(text)
-        self.category_window.bind(last_pos, '<Button-1>', self._set_active)
+        self.category_window.tag_bind(last_pos, '<Button-1>', self._set_active)
         self.control_window.set_state('normal')
         self.information_window.set_state('normal')
         self.information_window_bind(last_pos)

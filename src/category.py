@@ -44,14 +44,12 @@ class ControlWindow:
 
     def validate_error(self, name, message=None):
         widget = self.widgets[name]['widget']
-        widget.focus_set()
-        widget.update()
-        widget.focus_set()
-        widget.config(highlightthickness=3)
-        widget.config(highlightcolor='#3e3362')
-        widget.update()
+        self._set_focus(name)
         if message:
             tk.messagebox.showwarning('Error', message, parent=widget)
+        self._set_focus(name)
+        widget.config(highlightthickness=3)
+        widget.config(highlightcolor='#3e3362')
 
     def _set_focus(self, name, *args):
         widget = self.widgets[name]['widget']
@@ -122,6 +120,7 @@ class CategoryWindow:
     def delete_category(self, button_id):
         self._change_last_pos(increase=False)
         self.buttons[self.last_pos].set_state('hidden')
+        self.buttons[self.last_pos].widget.unbind('<Button-1>')
         last_index = self.grid_shape[0] * button_id[0] + button_id[1]
         self.create_button.change_position(self.last_pos)
         for index, text in enumerate(self.button_names[last_index+1:], start=last_index):
@@ -134,9 +133,13 @@ class CategoryWindow:
         else:
             return False
 
-    def bind(self, button_id, name, callback):
+    def bind(self, button_id, bind_name, callback):
         button = self.buttons[button_id]
-        button.widget.bind(name, callback(button))
+        button.widget.bind(bind_name, callback(button))
+
+    def tag_bind(self, button_id, bind_name, callback):
+        button = self.buttons[button_id]
+        button.widget.tag_bind(button.widget_image, bind_name, callback(button))
 
     def _change_last_pos(self, increase=True):
         last_pos = list(self.last_pos)
