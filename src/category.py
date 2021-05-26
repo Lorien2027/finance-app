@@ -262,8 +262,9 @@ class InformationWindow:
 
 
 class Category:
-    def __init__(self, position):
+    def __init__(self, position, name):
         self.position = position
+        self.name = name
         self.fields = []
 
     def create_field(self, amount, date, description, subcategory):
@@ -283,6 +284,7 @@ class Category:
 
 class Button:
     def __init__(self, master, image, position, state='normal', text=None):
+        self.text = text
         self.font = font.Font(font=('Lucida Sans', 22, 'normal'))
         self.position = tuple(position)
         self.tk_image = ImageTk.PhotoImage(image, master=master)
@@ -298,6 +300,7 @@ class Button:
         config_widget(self.widget)
 
     def change_text(self, text):
+        self.text = text
         self.widget.itemconfig(self.widget_text, text=text)
 
     def set_state(self, state):

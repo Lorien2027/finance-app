@@ -7,6 +7,7 @@ import platform
 from tkinter import font
 from group_storage import GroupStorage
 from utils import config_widget
+from statistics import StatisticsWindow
 
 if platform.system() != 'Windows':
     locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
@@ -48,6 +49,7 @@ class Application(tk.Frame):
                                      relief='flat', height=2, width=12, border=5)
             month_button.grid(row=i, column=0, sticky=tk.NSEW, padx=3, pady=3)
             month_button.configure(command=lambda obj=month_button: self._change_month(obj))
+            month_button.bind('<Double-Button-1>', self._draw_month_stats(i))
             self.months_buttons[i] = month_button
 
         self.groups_frame = tk.Frame(self, borderwidth=5, bg='#e2ddec')
@@ -67,6 +69,11 @@ class Application(tk.Frame):
         self.current_month = month_button.grid_info()['row']
         self.months_groups[self.current_month].tkraise()
 
+    def _draw_month_stats(self, month_id):
+        def draw_month(event):
+            StatisticsWindow(self.months_groups[month_id], data_type='month', master=self.master)
+        print(month_id)
+        return draw_month
 
 if __name__ == '__main__':
     root = tk.Tk()

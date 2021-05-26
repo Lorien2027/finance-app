@@ -5,7 +5,7 @@ from category import Category, ControlWindow, CategoryWindow, InformationWindow
 
 
 class GroupStorage(tk.Frame):
-    def __init__(self, master=None, grid_shape=(2, 2)):
+    def __init__(self, master=None, grid_shape=(6, 4)):
         super().__init__(master=master, relief='ridge', bg='#e2ddec', takefocus=1)
         self.font = font.Font(font=('Lucida Sans', 12, 'normal'))
         self.grid_shape = grid_shape
@@ -105,7 +105,7 @@ class GroupStorage(tk.Frame):
             return
         text = self.control_window.validate_success('category')
         last_pos = self.category_window.last_pos
-        category = Category(last_pos)
+        category = Category(last_pos, text)
         self.categories[last_pos] = category
         self.category_window.show_category(text)
         self.category_window.tag_bind(last_pos, '<Button-1>', self._set_active)
