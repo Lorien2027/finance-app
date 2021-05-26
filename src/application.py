@@ -72,7 +72,6 @@ class Application(tk.Frame):
     def _draw_month_stats(self, month_id):
         def draw_month(event):
             StatisticsWindow(self.months_groups[month_id], data_type='month', master=self.master)
-        print(month_id)
         return draw_month
 
 

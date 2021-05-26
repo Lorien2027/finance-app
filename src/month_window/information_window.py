@@ -14,10 +14,6 @@ class InformationWindow:
         self.information_frame.grid(sticky=tk.NSEW, row=0, column=1)
         state = 'disabled'
 
-        self.control_var = tk.StringVar()
-        self.control_label = tk.Label(self.control_frame, textvariable=self.control_var, font=self.label_font,
-                                      bg='#e2ddec', relief='flat', state=state)
-        self.control_label.grid(row=0, column=0)
         self.control_widgets = {}
         for i, (name, text) in enumerate(zip(('add', 'remove', 'change', 'delete'),
                                              ('Add field', 'Remove field', 'Change field', 'Delete category'))):
