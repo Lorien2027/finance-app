@@ -5,7 +5,7 @@ import locale
 import platform
 
 from tkinter import font
-from group_storage import GroupStorage
+from month_window import MonthWindow
 from utils import config_widget
 from statistics import StatisticsWindow
 
@@ -58,7 +58,7 @@ class Application(tk.Frame):
 
         self.months_groups = {}
         for month in range(12):
-            self.months_groups[month] = GroupStorage(self.groups_frame)
+            self.months_groups[month] = MonthWindow(self.groups_frame)
         config_widget(self.groups_frame)
         self.current_month = 0
         self._change_month(self.months_buttons[self.current_month])

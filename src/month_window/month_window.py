@@ -2,10 +2,10 @@ import tkinter as tk
 import tkinter.messagebox
 
 from tkinter import font
-from category import Category, ControlWindow, CategoryWindow, InformationWindow
+from month_window import Category, ControlWindow, CategoryWindow, InformationWindow
 
 
-class GroupStorage(tk.Frame):
+class MonthWindow(tk.Frame):
     def __init__(self, master=None, grid_shape=(6, 4)):
         super().__init__(master=master, relief='ridge', bg='#e2ddec', takefocus=1)
         self.font = font.Font(font=('Lucida Sans', 12, 'normal'))
