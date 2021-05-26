@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import font
 import tkinter.messagebox
+
+from tkinter import font
 from category import Category, ControlWindow, CategoryWindow, InformationWindow
 
 

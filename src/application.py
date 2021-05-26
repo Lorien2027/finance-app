@@ -75,6 +75,7 @@ class Application(tk.Frame):
         print(month_id)
         return draw_month
 
+
 if __name__ == '__main__':
     root = tk.Tk()
     app = Application(root, _('Finance management app'))
