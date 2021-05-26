@@ -9,8 +9,9 @@ class CategoryWindow:
         self.grid_shape = grid_shape
         self.last_pos = (0, 0)
         self.button_names = []
-        self.create_image = Image.open(os.path.join('images', 'create_button.png'))
-        self.button_image = Image.open(os.path.join('images', 'category_window.png'))
+        root = os.path.dirname(os.path.realpath(__file__))
+        self.create_image = Image.open(os.path.join(root, 'images', 'create_button.png'))
+        self.button_image = Image.open(os.path.join(root, 'images', 'category_window.png'))
         self.buttons = {}
         for ypos in range(self.grid_shape[0]):
             for xpos in range(self.grid_shape[1]):
