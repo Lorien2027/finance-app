@@ -5,6 +5,7 @@ import seaborn as sns
 import PIL
 
 from utils import config_widget
+from tkinter import font
 
 
 class StatisticsWindow(tk.Toplevel):
@@ -12,6 +13,8 @@ class StatisticsWindow(tk.Toplevel):
         super().__init__(master=master)
         self.title('Stats')
         self.geometry('800x600')
+        self.configure(bg='#e2ddec')
+        self.font = font.Font(font=('Lucida Sans', 12, 'normal'))
         self.row_data = categories
         self.data_type = data_type
         self._create_widgets()
@@ -27,6 +30,8 @@ class StatisticsWindow(tk.Toplevel):
         # self.canvas_2.bind("<Configure>", self._resize_image)
         # self.canvas_2.grid(sticky=tk.NSEW, row=0, column=1, padx=5, pady=5)
         # config_widget(self.canvas_2)
+        self.draw_year_button = tk.Button(master=self, text='Show year statistics')
+        self.draw_year_button.grid(sticky=tk.NS, row=1, column=0, padx=5, pady=5)
 
     def _draw(self):
         self._collect_data()
