@@ -1,21 +1,19 @@
-.. Finance app documentation master file, created by
-   sphinx-quickstart on Thu Apr 15 01:54:21 2021.
+.. src documentation master file, created by
+   sphinx-quickstart on Thu May 27 11:03:48 2021.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
 Welcome to Finance app's documentation!
 =======================================
 
-.. automodule:: application
-   :members:
-   :private-members:
-   :undoc-members:
-   :show-inheritance:
-
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
+   application
+   month_window
+   statistics
+   utils
 
 
 Indices and tables
