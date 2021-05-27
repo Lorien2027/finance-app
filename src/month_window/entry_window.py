@@ -20,9 +20,10 @@ class EntryWindow:
         self.widgets = {}
         self.label_font = font.Font(font=('Lucida Sans', 13, 'normal'))
         self.widget_font = font.Font(font=('Lucida Sans', 12, 'normal'))
-        for idx, name in enumerate(('category', 'amount', 'date', 'description', 'subcategory')):
-            state = 'disabled' if idx else 'normal'
-            label = tk.Label(master, text=name.capitalize() + ':', font=self.label_font, bg='#e2ddec', relief='flat',
+        for name, text in zip(('category', 'amount', 'date', 'description', 'subcategory'),
+                              (_('category'), _('amount'), _('date'), _('description'), _('subcategory'))):
+            state = 'disabled' if name != 'category' else 'normal'
+            label = tk.Label(master, text=text.capitalize() + ':', font=self.label_font, bg='#e2ddec', relief='flat',
                              state=state)
             label.pack(side=tk.LEFT, fill='both', expand=True)
             var = StringVar()
@@ -88,7 +89,7 @@ class EntryWindow:
         widget.config(highlightthickness=3)
         widget.config(highlightcolor='#3e3362')
 
-    def _set_focus(self, name):
+    def _set_focus(self, name, *args):
         """
         Set the focus on the field.
 
@@ -104,7 +105,7 @@ class EntryWindow:
         for name in self.widgets:
             self._remove_focus(name)
 
-    def _remove_focus(self, name):
+    def _remove_focus(self, name, *args):
         """
         Set the focus from the field.
 

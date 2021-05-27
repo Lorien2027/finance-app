@@ -25,9 +25,9 @@ class InformationWindow:
 
         self.control_widgets = {}
         for i, (name, text) in enumerate(zip(('add', 'remove', 'change', 'delete'),
-                                             ('Add field', 'Remove field', 'Change field', 'Delete category'))):
+                                             (_('Add field'), _('Remove field'), _('Change field'), _('Delete category')))):
             widget = tk.Button(self.control_frame, text=text, font=self.label_font, highlightbackground='#e2ddec',
-                               relief='solid', width=10, state=state)
+                               relief='solid', width=17, state=state)
             widget.grid(row=i+1, column=0)
             self.control_widgets[name] = {'widget': widget}
 
