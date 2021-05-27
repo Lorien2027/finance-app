@@ -1,3 +1,4 @@
+"""Month information window."""
 import tkinter as tk
 
 from tkinter import font
@@ -5,7 +6,15 @@ from utils import config_widget
 
 
 class InformationWindow:
+    """
+    A window for displaying and controlling a list of information about categories.
+
+    :param master: master window
+    :type master: tkinter.Frame
+    """
+
     def __init__(self, master):
+        """Create month information window."""
         self.label_font = font.Font(font=('Lucida Sans', 13, 'normal'))
         self.widget_font = font.Font(font=('Lucida Sans', 12, 'normal'))
         self.control_frame = tk.Frame(master, relief='ridge', bg='#e2ddec', takefocus=1)
@@ -39,6 +48,12 @@ class InformationWindow:
         config_widget(self.information_frame)
 
     def _select_row(self, event):
+        """
+        Select a list row by mouse click.
+
+        :param event: mouse click event
+        :type event: tkinter.Event
+        """
         selection = event.widget.curselection()
         if selection:
             for name in self.list_widgets:
@@ -49,6 +64,12 @@ class InformationWindow:
                     self.list_widgets[name]['widget'].select_set(selection[0])
 
     def get_selected_index(self):
+        """
+        Get the index of the selected row.
+
+        :return: selected row index
+        :rtype: int
+        """
         for name in self.list_widgets:
             widget = self.list_widgets[name]['widget']
             selection = widget.curselection()
@@ -58,12 +79,28 @@ class InformationWindow:
                 return selection[0]
 
     def change_index_field(self, index, field):
+        """
+        Change the list field by index.
+
+        :param index: field index to change
+        :type index: int
+        :param field: field value
+        :type field: Dict[str, float]
+        """
         for name in self.list_widgets:
             widget = self.list_widgets[name]['widget']
             widget.delete(index)
             widget.insert(index, f'{index}: {field[name]}')
 
     def update_list(self, fields, delete_list=False):
+        """
+        Update the list with new fields.
+
+        :param fields: fields to add
+        :type fields: List
+        :param delete_list: delete the list or not
+        :type delete_list: bool
+        """
         if isinstance(fields, dict):
             fields = [fields]
         for name in self.list_widgets:
@@ -76,12 +113,36 @@ class InformationWindow:
             widget['length'] += len(fields)
 
     def bind(self, button_name, bind_name, callback):
+        """
+        Bind the callback function to the widget by name.
+
+        :param button_name: category button name to bind
+        :type button_name: str
+        :param bind_name: event name
+        :type bind_name: str
+        :param callback: callback function
+        :type callback: method
+        """
         self.control_widgets[button_name]['widget'].bind(bind_name, callback)
 
     def unbind(self, button_name, bind_name):
+        """
+        Unbind the widget by name.
+
+        :param button_name: category button name to unbind
+        :type button_name: str
+        :param bind_name: event name
+        :type bind_name: str
+        """
         self.control_widgets[button_name]['widget'].unbind(bind_name)
 
     def set_state(self, state):
+        """
+        Set the window visibility mode.
+
+        :param state: window visibility mode
+        :type state: str
+        """
         for widgets in (self.list_widgets, self.control_widgets):
             for name in widgets:
                 for widget_name, widget in widgets[name].items():
