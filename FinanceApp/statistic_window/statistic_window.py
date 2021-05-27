@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import PIL
 
-from utils import config_widget
+from FinanceApp.utils import config_widget
 from tkinter import font
 
 sns.set(font='Times New Roman', font_scale=2)

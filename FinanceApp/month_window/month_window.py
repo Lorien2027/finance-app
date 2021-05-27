@@ -4,7 +4,7 @@ import tkinter.messagebox
 
 from tkinter import font
 
-from month_window import Category, EntryWindow, CategoryWindow, InformationWindow
+from FinanceApp.month_window import Category, EntryWindow, CategoryWindow, InformationWindow
 
 
 class MonthWindow(tk.Frame):

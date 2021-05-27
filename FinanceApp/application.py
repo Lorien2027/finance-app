@@ -1,18 +1,20 @@
 """Base window of application."""
-import tkinter as tk
+import os
 import gettext
 import locale
 import platform
+import tkinter as tk
 
 from tkinter import font
-from month_window import MonthWindow
-from utils import config_widget
-from statistics import StatisticsWindow
+
+from FinanceApp.month_window import MonthWindow
+from FinanceApp.statistic_window import StatisticsWindow
+from FinanceApp.utils import config_widget
 
 if platform.system() != 'Windows':
     locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
 localedir = gettext.find('Months')
-localedir = localedir if localedir is not None else '.'
+localedir = localedir if localedir is not None else os.path.dirname(__file__)
 gettext.install('Months', localedir, names=('ngettext', ))
 
 
@@ -24,8 +26,10 @@ class Application(tk.Frame):
     :param title: title of the application
     """
 
-    def __init__(self, master=None, title='Application'):
+    def __init__(self, master=None, title=_('Finance management app')):
         """Create main window of application with widgets."""
+        if not master:
+            master = tk.Tk()
         super().__init__(master=master, relief='ridge', bg='white', takefocus=1)
         self.master.title(title)
         self.master.minsize(width=1000, height=600)
@@ -75,7 +79,6 @@ class Application(tk.Frame):
         return draw_month
 
 
-if __name__ == '__main__':
-    root = tk.Tk()
-    app = Application(root, _('Finance management app'))
+def main():
+    app = Application()
     app.mainloop()

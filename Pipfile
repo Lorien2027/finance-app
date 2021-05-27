@@ -1,0 +1,11 @@
+[packages]
+
+[dev-packages]
+doit = "*"
+flake8 = "*"
+pydocstyle = "*"
+sphinx = "*"
++build = "*"
+
+[requires]
+python_version = "3.9"

@@ -3,7 +3,7 @@ import tkinter as tk
 
 from tkinter import font, Canvas
 from PIL import ImageTk
-from utils import config_widget
+from FinanceApp.utils import config_widget
 
 
 class CategoryButton:
