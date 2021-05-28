@@ -1,7 +1,7 @@
 """Month category window."""
 import os
 
-from month_window import CategoryButton
+from FinanceApp.month_window import CategoryButton
 from PIL import Image, ImageTk
 
 

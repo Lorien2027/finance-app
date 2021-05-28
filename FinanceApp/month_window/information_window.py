@@ -2,7 +2,7 @@
 import tkinter as tk
 
 from tkinter import font
-from utils import config_widget
+from FinanceApp.utils import config_widget
 
 
 class InformationWindow:
@@ -24,8 +24,10 @@ class InformationWindow:
         state = 'disabled'
 
         self.control_widgets = {}
-        for i, (name, text) in enumerate(zip(('add', 'remove', 'change', 'delete'),
-                                             (_('Add field'), _('Remove field'), _('Change field'), _('Delete category')))):
+        for i, (name, text) in enumerate(zip(
+                ('add', 'remove', 'change', 'delete'),
+                (_('Add field'), _('Remove field'), _('Change field'), _('Delete category'))
+        )):
             widget = tk.Button(self.control_frame, text=text, font=self.label_font, highlightbackground='#e2ddec',
                                relief='solid', width=17, state=state)
             widget.grid(row=i+1, column=0)
