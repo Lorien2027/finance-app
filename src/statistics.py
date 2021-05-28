@@ -14,21 +14,23 @@ sns.set_style("ticks", {"xtick.major.size": 8, "ytick.major.size": 8})
 
 class StatisticsWindow(tk.Toplevel):
     """Main window for statistics. Different from main app window."""
-    def __init__(self, row_data, data_type='category', master=None):
+
+    def __init__(self, raw_data, data_type='category', master=None):
         """
         Configures statistics window and draws basic plots.
 
-        :param row_data: data to plot
+        :param raw_data: data to plot
         :param data_type: type of data. Supports 'month' or 'category'.
         :param master: master
         """
         super().__init__(master=master)
         self.title('Stats')
-        self.geometry('800x600')
+        self.geometry('1000x550')
         self.configure(bg='#e2ddec')
         self.font = font.Font(font=('Lucida Sans', 12, 'normal'))
-        self.row_data = row_data
+        self.raw_data = raw_data
         self.data_type = data_type
+        self.widgets = {}
         self._create_widgets()
         config_widget(self)
         self._draw()
@@ -36,16 +38,18 @@ class StatisticsWindow(tk.Toplevel):
     def _create_widgets(self):
         """Create all widgets of statistic window."""
 
-        self.canvas_1 = tk.Canvas(self, bd=0, highlightthickness=0, bg='#e2ddec')
-        self.canvas_1.bind("<Configure>", self._resize_image)
-        self.canvas_1.grid(sticky=tk.NSEW, row=0, column=0, padx=5, pady=5)
-        config_widget(self.canvas_1)
-        self.canvas_2 = tk.Canvas(self, bd=0, highlightthickness=0, bg='#e2ddec')
-        self.canvas_2.bind("<Configure>", self._resize_image)
-        self.canvas_2.grid(sticky=tk.NSEW, row=0, column=1, padx=5, pady=5)
-        config_widget(self.canvas_2)
+        for idx in range(2):
+            self.widgets[idx] = {}
+            self.widgets[idx]['canvas'] = (tk.Canvas(self, bd=0, highlightthickness=0, bg='#e2ddec'))
+            self.widgets[idx]['canvas'].bind("<Configure>", self.resize_plot(idx))
+            self.widgets[idx]['canvas'].grid(sticky=tk.NSEW, row=0, column=idx, padx=5, pady=5)
+            config_widget(self.widgets[idx]['canvas'])
+
+        # self.buttons_frame = tk.Frame(master=self, bg='#e2ddec')
+        # self.buttons_frame.grid(row=1, column=0, columnspan=2)
+        # config_widget(self.buttons_frame)
         self.draw_year_button = tk.Button(master=self, text=_('Show year statistics'))
-        self.draw_year_button.grid(sticky=tk.NS, row=1, column=0, padx=5, pady=5)
+        self.draw_year_button.grid(sticky=tk.NS, row=1, column=0, columnspan=2, padx=5, pady=5)
 
     def _draw(self):
         """Draw default statistics from data."""
@@ -63,9 +67,9 @@ class StatisticsWindow(tk.Toplevel):
         self.columns = columns
         if self.data_type == 'month':
             self.data = []
-            for category in self.row_data.categories:
-                category_name = self.row_data.categories[category].name
-                category_data = pd.DataFrame(self.row_data.categories[category].fields)
+            for category in self.raw_data.categories:
+                category_name = self.raw_data.categories[category].name
+                category_data = pd.DataFrame(self.raw_data.categories[category].fields)
                 category_data['category'] = category_name
                 self.data.append(category_data)
             self.data = pd.concat(self.data, ignore_index=True)
@@ -74,7 +78,7 @@ class StatisticsWindow(tk.Toplevel):
             self.data_by_category = self.data.groupby([columns['category']])[columns['amount']].sum().reset_index()
             self.data_by_date = self.data.groupby([columns['date']])[columns['amount']].sum().reset_index()
         elif self.data_type == 'category':
-            self.data = pd.DataFrame(self.row_data.fields).rename(columns={'subcategory': 'category'}, inplace=True)
+            self.data = pd.DataFrame(self.raw_data.fields).rename(columns={'subcategory': 'category'}, inplace=True)
             self.data.rename(columns=columns, inplace=True)
             self.data.replace({'date': {'': 'unknown'}}, inplace=True)
             self.data_by_category = self.data.groupby([columns['category']])[columns['amount']].sum().reset_index()
@@ -84,42 +88,35 @@ class StatisticsWindow(tk.Toplevel):
 
     def _draw_by_category(self):
         """Draw barplot of expenses per category."""
-        fig, ax = plt.subplots(figsize=(12, 8))
-        print(ax)
-        sns.barplot(ax=ax, data=self.data_by_category, x=self.columns['category'], y=self.columns['amount'])
-        self.show_values_on_bars(ax)
-        plt.grid(alpha=0.35)
-        fig.canvas.draw()
-
-        self.category_img = PIL.Image.frombytes('RGB', fig.canvas.get_width_height(), fig.canvas.tostring_rgb())
-        self.category_tk_image = PIL.ImageTk.PhotoImage(self.category_img, master=self)
-        self.widget_image_1 = self.canvas_1.create_image(0, 0, image=self.category_tk_image, anchor='nw')
-        plt.close()
+        self.plot(0, self.data_by_category, x='category', y='amount')
 
     def _draw_by_date(self):
         """Draw barplot of expenses per date."""
+        self.plot(1, self.data_by_date, x='date', y='amount')
+
+    def plot(self, idx, data, x='date', y='amount'):
         fig, ax = plt.subplots(figsize=(12, 8))
-        # ax = fig.add_subplot(111)
-        sns.barplot(ax=ax, data=self.data_by_date, x=self.columns['date'], y=self.columns['amount'])
+        sns.barplot(ax=ax, data=data, x=self.columns[x], y=self.columns[y])
         self.show_values_on_bars(ax)
         plt.grid(alpha=0.35)
         fig.canvas.draw()
 
-        self.date_img = PIL.Image.frombytes('RGB', fig.canvas.get_width_height(), fig.canvas.tostring_rgb())
-        self.date_tk_image = PIL.ImageTk.PhotoImage(self.date_img, master=self)
-        self.widget_image_2 = self.canvas_2.create_image(0, 0, image=self.date_tk_image, anchor='nw')
+        widget = self.widgets[idx]
+        widget['img'] = PIL.Image.frombytes('RGB', fig.canvas.get_width_height(), fig.canvas.tostring_rgb())
+        widget['tk_img'] = PIL.ImageTk.PhotoImage(widget['img'], master=self)
+        widget['widget_img'] = widget['canvas'].create_image(0, 0, image=widget['tk_img'], anchor='nw')
         plt.close()
 
-    def _resize_image(self, event):
-        """Resize callback for images"""
-        self.canvas_1.config(width=event.width, height=event.height)
-        self.canvas_2.config(width=event.width, height=event.height)
-        category_image = self.category_img.resize((event.width, event.height))
-        date_image = self.date_img.resize((event.width, event.height))
-        self.category_tk_image = PIL.ImageTk.PhotoImage(category_image)
-        self.date_tk_image = PIL.ImageTk.PhotoImage(date_image)
-        self.canvas_1.itemconfig(self.widget_image_1, image=self.category_tk_image)
-        self.canvas_2.itemconfig(self.widget_image_2, image=self.date_tk_image)
+    def resize_plot(self, canvas_id):
+        """Resize callback for canvas widgets"""
+        def _resize_image(event):
+            widget = self.widgets[canvas_id]
+            widget['canvas'].config(width=event.width, height=event.height)
+            image = widget['img'].resize((event.width, event.height))
+            widget['tk_img'] = PIL.ImageTk.PhotoImage(image)
+            widget['canvas'].itemconfig(widget['widget_img'], image=widget['tk_img'])
+
+        return _resize_image
 
     @staticmethod
     def show_values_on_bars(ax):
@@ -133,3 +130,6 @@ class StatisticsWindow(tk.Toplevel):
             _y = p.get_y() + p.get_height()
             value = '{:.2f}'.format(p.get_height())
             ax.text(_x, _y, value, ha="center")
+
+    def validate(self, data):
+        pass
