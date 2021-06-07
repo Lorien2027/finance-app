@@ -62,7 +62,10 @@ class MonthWindow(tk.Frame):
         :rtype: function
         """
         def config(event):
+            if self.active_category:
+                self.category_window.buttons[self.active_category].set_active(active=False)
             self.active_category = button.position
+            button.set_active()
             self._information_window_bind(button.position)
             self.information_window.update_list(self.categories[button.position].fields, delete_list=True)
         return config
@@ -164,11 +167,12 @@ class MonthWindow(tk.Frame):
         category = Category(last_pos, text)
         self.categories[last_pos] = category
         self.category_window.show_category(text)
-        self.category_window.tag_bind(last_pos, '<Button-1>', self._set_active)
+        self.category_window.bind(last_pos, '<Button-1>', self._set_active)
         self.control_window.set_state('normal')
         self.information_window.set_state('normal')
         self._information_window_bind(last_pos)
         self.information_window.update_list([], delete_list=True)
+        self.category_window.buttons[last_pos].widget.event_generate('<Button-1>')
         self.active_category = last_pos
         self.update_idletasks()
         self.update()

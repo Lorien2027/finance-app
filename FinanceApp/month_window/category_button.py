@@ -64,6 +64,13 @@ class CategoryButton:
         self.widget.itemconfig(self.widget_image, state=state)
         self.widget.itemconfig(self.widget_text, state=state)
 
+    def set_active(self, active=True):
+        if active:
+            self.font = font.Font(font=('Lucida Sans', 24, 'bold'))
+        else:
+            self.font = font.Font(font=('Lucida Sans', 22, 'normal'))
+        self.widget.itemconfig(self.widget_text, font=self.font)
+
 
 class Category:
     """

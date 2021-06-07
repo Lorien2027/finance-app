@@ -90,6 +90,20 @@ class CategoryWindow:
         button = self.buttons[button_id]
         button.widget.tag_bind(button.widget_image, bind_name, callback(button))
 
+    def bind(self, button_id, bind_name, callback):
+        """
+        Bind the callback function to the widget by name.
+
+        :param button_id: category button id to bind
+        :type button_id: Tuple[int, int]
+        :param bind_name: event name
+        :type bind_name: str
+        :param callback: callback function
+        :type callback: method
+        """
+        button = self.buttons[button_id]
+        button.widget.bind(bind_name, callback(button))
+
     def _change_last_pos(self, increase=True):
         """
         Change the last position of the widget in the grid.
