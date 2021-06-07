@@ -68,12 +68,22 @@ class Application(tk.Frame):
         self._change_month(self.months_buttons[self.current_month])
 
     def _change_month(self, month_button):
+        """
+        Change selected month.
+
+        :param month_button: clicked month button
+        """
         self.months_buttons[self.current_month].configure(relief='flat')
         month_button.configure(relief='sunken')
         self.current_month = month_button.grid_info()['row']
         self.months_groups[self.current_month].tkraise()
 
     def _draw_month_stats(self, month_id):
+        """
+        Open statistics window and draw selected month graphs.
+
+        :param month_id: selected month
+        """
         def draw_month(event):
             StatisticsWindow(self.months_groups[month_id], data_type='month', master=self)
         return draw_month

@@ -149,7 +149,7 @@ class StatisticsWindow(tk.Toplevel):
         self.show_values_on_bars(ax)
         plt.grid(alpha=0.35)
         if title:
-            plt.title(title)
+            plt.title(title, y=1.03)
         fig.canvas.draw()
 
         widget = self.widgets[idx]
