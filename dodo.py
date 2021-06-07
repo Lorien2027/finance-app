@@ -10,7 +10,7 @@ DOIT_CONFIG = {'default_tasks': ['all']}
 def task_gitclean():
     """Clean all generated files not tracked by git."""
     return {
-        'actions': ['git clean -xdf'],
+        'actions': ['git clean -e .doit* -xdf'],
     }
 
 
