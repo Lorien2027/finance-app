@@ -5,6 +5,7 @@ import tkinter.messagebox
 from tkinter import font
 
 from FinanceApp.month_window import Category, EntryWindow, CategoryWindow, InformationWindow
+from FinanceApp.statistic_window import StatisticsWindow
 
 
 class MonthWindow(tk.Frame):
@@ -69,6 +70,21 @@ class MonthWindow(tk.Frame):
             self._information_window_bind(button.position)
             self.information_window.update_list(self.categories[button.position].fields, delete_list=True)
         return config
+
+    def _draw_category_stats(self, button):
+        """
+        Draw active category statistics on double mouse1 click.
+
+        :param button: button that was clicked
+        :type button: month_window.category_button.CategoryButton
+        :return: mouse click callback
+        :rtype: function
+        """
+        def draw_category(event):
+            self.category_window.buttons[button.position].widget.event_generate('<Button-1>')
+            self.active_category = button.position
+            StatisticsWindow(self.categories[self.active_category], data_type='category', master=self)
+        return draw_category
 
     def _information_window_bind(self, button_id):
         """
@@ -168,6 +184,7 @@ class MonthWindow(tk.Frame):
         self.categories[last_pos] = category
         self.category_window.show_category(text)
         self.category_window.bind(last_pos, '<Button-1>', self._set_active)
+        self.category_window.bind(last_pos, '<Double-Button-1>', self._draw_category_stats)
         self.control_window.set_state('normal')
         self.information_window.set_state('normal')
         self._information_window_bind(last_pos)

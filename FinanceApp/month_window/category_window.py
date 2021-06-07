@@ -64,6 +64,7 @@ class CategoryWindow:
         self._change_last_pos(increase=False)
         self.buttons[self.last_pos].set_state('hidden')
         self.buttons[self.last_pos].widget.unbind('<Button-1>')
+        self.buttons[self.last_pos].widget.unbind('<Double-Button-1>')
         last_index = self.grid_shape[0] * button_id[0] + button_id[1]
         self.create_button.change_position(self.last_pos)
         for index, text in enumerate(self.button_names[last_index+1:], start=last_index):
