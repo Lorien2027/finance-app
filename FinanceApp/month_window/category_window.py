@@ -47,7 +47,7 @@ class CategoryWindow:
         else:
             self.create_button.widget.grid_forget()
             self.create_button.set_state('hidden')
-            self.create_button.widget.tag_unbind(self.create_button.widget_image, '<Button-1>')
+            self.create_button.widget.unbind('<Button-1>')
         button.set_text(text)
         self.button_names.append(text)
         button.set_state('normal')

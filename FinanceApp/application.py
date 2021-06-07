@@ -32,7 +32,7 @@ class Application(tk.Frame):
             master = tk.Tk()
         super().__init__(master=master, relief='ridge', bg='white', takefocus=1)
         self.master.title(title)
-        self.master.minsize(width=1000, height=600)
+        self.master.minsize(width=1265, height=755)
         self.font = font.Font(font=('Lucida Sans', 12, 'normal'))
         self._create_widgets()
         self.grid(sticky=tk.NSEW, row=0, column=0)

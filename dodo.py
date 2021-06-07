@@ -21,6 +21,13 @@ def task_html():
     }
 
 
+def task_test():
+    """Preform tests."""
+    return {
+        'actions': ['python -m unittest discover -q']
+    }
+
+
 def task_pot():
     """Create .pot files."""
     return {
@@ -76,5 +83,5 @@ def task_all():
     """Perform all build task."""
     return {
         'actions': None,
-        'task_dep': ['gitclean', 'style', 'docstyle', 'html', 'wheel']
+        'task_dep': ['gitclean', 'test', 'style', 'docstyle', 'html', 'wheel']
     }

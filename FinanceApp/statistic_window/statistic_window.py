@@ -173,7 +173,6 @@ class StatisticsWindow(tk.Toplevel):
             widget['canvas'].config(width=event.width, height=event.height)
             image = widget['img'].resize((event.width, event.height))
             widget['tk_img'] = PIL.ImageTk.PhotoImage(image)
-            print(widget['tk_img'].width(), widget['tk_img'].height())
             widget['canvas'].itemconfig(widget['widget_img'], image=widget['tk_img'])
         return _resize_image
 

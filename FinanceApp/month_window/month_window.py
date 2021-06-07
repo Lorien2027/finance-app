@@ -51,7 +51,7 @@ class MonthWindow(tk.Frame):
         self.information_window = InformationWindow(self.information_frame)
 
         create_button = self.category_window.create_button
-        create_button.widget.tag_bind(create_button.widget_image, '<Button-1>', self._create_category)
+        create_button.widget.bind('<Button-1>', self._create_category)
 
     def _set_active(self, button):
         """
@@ -223,7 +223,7 @@ class MonthWindow(tk.Frame):
         create_button_bind = self.category_window.delete_category(self.active_category)
         if create_button_bind:
             create_button = self.category_window.create_button
-            create_button.widget.tag_bind(create_button.widget_image, '<Button-1>', self._create_category)
+            create_button.widget.bind('<Button-1>', self._create_category)
         self.active_category = (0, 0)
         if self.category_window.buttons[self.active_category].get_state() == 'normal':
             self.category_window.buttons[self.active_category].widget.event_generate('<Button-1>')
