@@ -64,11 +64,24 @@ class CategoryButton:
         self.widget.itemconfig(self.widget_image, state=state)
         self.widget.itemconfig(self.widget_text, state=state)
 
+    def get_state(self):
+        """
+        Get button visibility.
+
+        :return: button visibility state
+        """
+        return self.widget.itemcget(self.widget_image, 'state')
+
     def set_active(self, active=True):
+        """
+        Change text font to bold or normal.
+
+        :param active: is button selected
+        """
         if active:
-            self.font = font.Font(font=('Lucida Sans', 24, 'bold'))
+            self.font.configure(size=24, weight='bold')
         else:
-            self.font = font.Font(font=('Lucida Sans', 22, 'normal'))
+            self.font.configure(size=22, weight='normal')
         self.widget.itemconfig(self.widget_text, font=self.font)
 
 

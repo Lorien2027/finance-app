@@ -208,3 +208,5 @@ class MonthWindow(tk.Frame):
             create_button = self.category_window.create_button
             create_button.widget.tag_bind(create_button.widget_image, '<Button-1>', self._create_category)
         self.active_category = (0, 0)
+        if self.category_window.buttons[self.active_category].get_state() == 'normal':
+            self.category_window.buttons[self.active_category].widget.event_generate('<Button-1>')

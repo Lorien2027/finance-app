@@ -1,3 +1,6 @@
+"""Util functions for project."""
+
+
 def config_widget(widget):
     """
     Configure the columns and rows of the widget grid.

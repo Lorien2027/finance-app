@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""""""
+"""Application entry."""
 
 from application import main
 

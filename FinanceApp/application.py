@@ -80,5 +80,6 @@ class Application(tk.Frame):
 
 
 def main():
+    """Application entry."""
     app = Application()
     app.mainloop()

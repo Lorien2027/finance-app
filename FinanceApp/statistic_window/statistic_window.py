@@ -17,7 +17,7 @@ class StatisticsWindow(tk.Toplevel):
 
     def __init__(self, raw_data, data_type='category', master=None):
         """
-        Configures statistics window and draws basic plots.
+        Configure statistics window and draw basic plots.
 
         :param raw_data: data to plot
         :param data_type: type of data. Supports 'month' or 'category'.
@@ -37,7 +37,6 @@ class StatisticsWindow(tk.Toplevel):
 
     def _create_widgets(self):
         """Create all widgets of statistic window."""
-
         for idx in range(2):
             self.widgets[idx] = {}
             self.widgets[idx]['canvas'] = (tk.Canvas(self, bd=0, highlightthickness=0, bg='#e2ddec'))
@@ -48,7 +47,7 @@ class StatisticsWindow(tk.Toplevel):
         # self.buttons_frame = tk.Frame(master=self, bg='#e2ddec')
         # self.buttons_frame.grid(row=1, column=0, columnspan=2)
         # config_widget(self.buttons_frame)
-        self.draw_year_button = tk.Button(master=self, text=_('Show year statistics'))
+        self.draw_year_button = tk.Button(master=self, text=_('Show year statistics'), bg='#f0f4f9')
         self.draw_year_button.grid(sticky=tk.NS, row=1, column=0, columnspan=2, padx=5, pady=5)
 
     def _draw(self):
@@ -95,6 +94,15 @@ class StatisticsWindow(tk.Toplevel):
         self.plot(1, self.data_by_date, x='date', y='amount')
 
     def plot(self, idx, data, x='date', y='amount'):
+        """
+        Plot bars according to given data.
+
+        :param idx: canvas id for plot
+        :param data: data to use for plot
+        :type data: pandas.DataFrame
+        :param x: x axis column name in data
+        :param y: y axis column name in data
+        """
         fig, ax = plt.subplots(figsize=(12, 8))
         sns.barplot(ax=ax, data=data, x=self.columns[x], y=self.columns[y])
         self.show_values_on_bars(ax)
@@ -108,7 +116,7 @@ class StatisticsWindow(tk.Toplevel):
         plt.close()
 
     def resize_plot(self, canvas_id):
-        """Resize callback for canvas widgets"""
+        """Resize callback for canvas widgets."""
         def _resize_image(event):
             widget = self.widgets[canvas_id]
             widget['canvas'].config(width=event.width, height=event.height)
@@ -130,6 +138,3 @@ class StatisticsWindow(tk.Toplevel):
             _y = p.get_y() + p.get_height()
             value = '{:.2f}'.format(p.get_height())
             ax.text(_x, _y, value, ha="center")
-
-    def validate(self, data):
-        pass
