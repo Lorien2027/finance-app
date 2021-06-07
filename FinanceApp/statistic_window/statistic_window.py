@@ -25,7 +25,7 @@ class StatisticsWindow(tk.Toplevel):
         """
         super().__init__(master=master)
         self.title('Stats')
-        self.geometry('1000x550')
+        self.geometry('1200x600')
         self.configure(bg='#e2ddec')
         self.font = font.Font(font=('Lucida Sans', 12, 'normal'))
         self.raw_data = raw_data
@@ -83,7 +83,6 @@ class StatisticsWindow(tk.Toplevel):
         }
         self.columns = columns
         if self.data_type == 'month':
-            # print(self.master)
             self.data = []
             for category in self.raw_data.categories:
                 category_name = self.raw_data.categories[category].name
@@ -96,7 +95,6 @@ class StatisticsWindow(tk.Toplevel):
             self.data_by_category = self.data.groupby([columns['category']])[columns['amount']].sum().reset_index()
             self.data_by_date = self.data.groupby([columns['date']])[columns['amount']].sum().reset_index()
         elif self.data_type == 'category':
-            # print(self.master)
             self.data = pd.DataFrame(self.raw_data.fields)
             self.data.rename(columns={'subcategory': 'category'}, inplace=True)
             self.data.rename(columns=columns, inplace=True)
@@ -170,7 +168,6 @@ class StatisticsWindow(tk.Toplevel):
 
     def resize_plot(self, canvas_id):
         """Resize callback for canvas widgets."""
-
         def _resize_image(event):
             widget = self.widgets[canvas_id]
             widget['canvas'].config(width=event.width, height=event.height)
@@ -178,11 +175,10 @@ class StatisticsWindow(tk.Toplevel):
             widget['tk_img'] = PIL.ImageTk.PhotoImage(image)
             print(widget['tk_img'].width(), widget['tk_img'].height())
             widget['canvas'].itemconfig(widget['widget_img'], image=widget['tk_img'])
-
         return _resize_image
 
     def show_yearly_stats(self):
-        """Show yearly or monthly statistics depending on the """
+        """Show yearly or monthly statistics depending on the initial type."""
         if self.plot_changed:
             return
         if self.data_type == 'month':

@@ -76,5 +76,5 @@ def task_all():
     """Perform all build task."""
     return {
         'actions': None,
-        'task_dep': ['gitclean', 'style', 'html', 'wheel']  # 'docstyle'
+        'task_dep': ['gitclean', 'style', 'docstyle', 'html', 'wheel']
     }
