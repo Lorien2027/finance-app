@@ -1,7 +1,4 @@
 import unittest
-import _tkinter
-import tkinter as tk
-# import os
 
 from FinanceApp import Application
 from test import TkinterTestCase
@@ -12,24 +9,6 @@ class TestFinanceApplication(TkinterTestCase):
         app = Application(self.root)
         self.pump_events()
         self.assertEqual((app.winfo_width(), app.winfo_height()), (1265, 755))
-
-    # def test_1_locale(self):
-    #     import locale
-    #     import gettext
-    #     import platform
-    #     os.environ["LC_ALL"] = "ru_RU.UTF-8"
-    #
-    #     if platform.system() != 'Windows':
-    #         locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
-    #     localedir = gettext.find('Months')
-    #     localedir = localedir if localedir is not None else os.path.dirname(__file__)
-    #     # print(localedir)
-    #     gettext.install('Months', localedir, names=('ngettext',))
-    #
-    #     app = Application(self.root)
-    #     self.pump_events()
-    #
-    #     self.assertEqual(app.master.title(), "Приложение для управления расходами")
 
     def test_2_change_month(self):
         default_month = 0

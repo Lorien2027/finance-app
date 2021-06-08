@@ -1,13 +1,14 @@
 """Module for plotting expenses statistics."""
 import tkinter as tk
 import pandas as pd
+import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import PIL
 
 from FinanceApp.utils import config_widget
 from tkinter import font
-
+matplotlib.use('agg')
 sns.set(font='Times New Roman', font_scale=2)
 sns.set_style("ticks", {"xtick.major.size": 8, "ytick.major.size": 8})
 
