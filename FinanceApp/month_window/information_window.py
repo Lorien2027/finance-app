@@ -34,8 +34,11 @@ class InformationWindow:
             self.control_widgets[name] = {'widget': widget}
 
         self.list_widgets = {}
-        for i, name in enumerate((_('amount'), _('date'), _('description'), _('subcategory'))):
-            label = tk.Label(self.information_frame, text=name.capitalize(), font=self.label_font, bg='#e2ddec',
+        for i, (name, text) in enumerate(zip(
+                ('amount', 'date', 'description', 'subcategory'),
+                (_('amount'), _('date'), _('description'), _('subcategory'))
+        )):
+            label = tk.Label(self.information_frame, text=text.capitalize(), font=self.label_font, bg='#e2ddec',
                              relief='flat', state=state)
             label.grid(row=0, column=i)
             widget = tk.Listbox(self.information_frame,  relief='solid', highlightthickness=0, bg='#f0f4f9',

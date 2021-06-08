@@ -110,19 +110,19 @@ msgstr "Изменить поле"
 msgid "Delete category"
 msgstr "Удалить категорию"
 
-#: FinanceApp/month_window/information_window.py:37
+#: FinanceApp/month_window/information_window.py:39
 msgid "amount"
 msgstr "Количество"
 
-#: FinanceApp/month_window/information_window.py:37
+#: FinanceApp/month_window/information_window.py:39
 msgid "date"
 msgstr "Дата"
 
-#: FinanceApp/month_window/information_window.py:37
+#: FinanceApp/month_window/information_window.py:39
 msgid "description"
 msgstr "Описание"
 
-#: FinanceApp/month_window/information_window.py:37
+#: FinanceApp/month_window/information_window.py:39
 msgid "subcategory"
 msgstr "Подкатегория"
 
