@@ -110,6 +110,22 @@ msgstr "Изменить поле"
 msgid "Delete category"
 msgstr "Удалить категорию"
 
+#: FinanceApp/month_window/information_window.py:37
+msgid "amount"
+msgstr "Количество"
+
+#: FinanceApp/month_window/information_window.py:37
+msgid "date"
+msgstr "Дата"
+
+#: FinanceApp/month_window/information_window.py:37
+msgid "description"
+msgstr "Описание"
+
+#: FinanceApp/month_window/information_window.py:37
+msgid "subcategory"
+msgstr "Подкатегория"
+
 #: FinanceApp/statistic_window/statistic_window.py:36
 msgid "Expenses by date"
 msgstr "График расходов по дням"
