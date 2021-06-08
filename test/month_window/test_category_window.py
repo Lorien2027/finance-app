@@ -10,7 +10,7 @@ class TestFinanceApplication(TkinterTestCase):
         self.pump_events()
         self.assertEqual((app.winfo_width(), app.winfo_height()), (1265, 755))
 
-    def test_2_change_month(self):
+    def test_1_change_month(self):
         default_month = 0
         test_month = 7
 
@@ -21,7 +21,7 @@ class TestFinanceApplication(TkinterTestCase):
         self.pump_events()
         self.assertEqual(app.current_month, test_month)
 
-    def test_3_add_category(self):
+    def test_2_add_category(self):
         test_string = 'dog'
         app = Application(self.root)
         self.pump_events()
@@ -34,7 +34,7 @@ class TestFinanceApplication(TkinterTestCase):
         self.pump_events()
         self.assertEqual(group.category_window.buttons[group.active_category].text, test_string)
 
-    def test_4_add_field(self):
+    def test_3_add_field(self):
         category_name = 'dog'
         test_amount = 255.0
 

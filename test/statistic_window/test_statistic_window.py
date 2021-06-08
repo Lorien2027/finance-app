@@ -1,6 +1,4 @@
 import unittest
-import _tkinter
-import tkinter as tk
 
 from FinanceApp.month_window import Category
 from FinanceApp.statistic_window import StatisticsWindow

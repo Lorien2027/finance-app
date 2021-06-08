@@ -9,3 +9,4 @@ dist
 .coverage
 .doit*
 *.egg-info
+.coverage
