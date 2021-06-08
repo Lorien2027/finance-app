@@ -27,11 +27,13 @@ class TestFinanceApplication(TkinterTestCase):
         self.pump_events()
         group = app.months_groups[0]
         entry = group.control_window.widgets['category']['widget']
+        self.root.deiconify()
         entry.focus_set()
         entry.insert(0, test_string)
         self.pump_events()
         group.category_window.create_button.widget.event_generate('<Button-1>')
         self.pump_events()
+        self.root.iconify()
         self.assertEqual(group.category_window.buttons[group.active_category].text, test_string)
 
     def test_3_add_field(self):
@@ -42,6 +44,7 @@ class TestFinanceApplication(TkinterTestCase):
         self.pump_events()
         group = app.months_groups[0]
         category_entry = group.control_window.widgets['category']['widget']
+        self.root.deiconify()
         category_entry.focus_set()
         category_entry.insert(0, category_name)
         self.pump_events()
@@ -54,6 +57,7 @@ class TestFinanceApplication(TkinterTestCase):
         info_window = group.information_window
         info_window.control_widgets['add']['widget'].event_generate('<Button-1>')
         self.pump_events()
+        self.root.iconify()
         self.assertEqual(group.categories[group.active_category].fields[0]['amount'], test_amount)
 
 

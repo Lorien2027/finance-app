@@ -16,7 +16,7 @@ sns.set_style("ticks", {"xtick.major.size": 8, "ytick.major.size": 8})
 class StatisticsWindow(tk.Toplevel):
     """Main window for statistics. Different from main app window."""
 
-    def __init__(self, raw_data, data_type='category', master=None):
+    def __init__(self, raw_data, data_type='category', draw=True, master=None):
         """
         Configure statistics window and draw basic plots.
 
@@ -39,9 +39,10 @@ class StatisticsWindow(tk.Toplevel):
             'category': _('Expenses by category'),
             'month': _('Expenses by month')
         }
-        self._create_widgets()
         self._collect_data()
-        self._draw()
+        if draw:
+            self._create_widgets()
+            self._draw()
         if not self.is_valid:
             self.destroy()
 

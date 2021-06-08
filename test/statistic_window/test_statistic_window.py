@@ -16,13 +16,16 @@ class TestStatisticWindow(TkinterTestCase):
 
     def test_0_window_size(self):
         self.test_category.add_field(**self.test_data)
-        app = StatisticsWindow(self.test_category, master=self.root)
+        app = StatisticsWindow(self.test_category, draw=False, master=self.root)
         self.pump_events()
-        self.assertEqual((app.winfo_width(), app.winfo_height()), (1200, 600))
+        app_shape = (app.winfo_width(), app.winfo_height())
+        app.iconify()
+        self.assertEqual(app_shape, (1200, 600))
 
     def test_1_data(self):
         self.test_category.add_field(**self.test_data)
-        app = StatisticsWindow(self.test_category, master=self.root)
+        app = StatisticsWindow(self.test_category, draw=False, master=self.root)
+        app.iconify()
         self.pump_events()
         self.assertEqual(app.data[app.columns['amount']][0], self.test_data['amount'])
 

@@ -8,6 +8,7 @@ class TkinterTestCase(unittest.TestCase):
 
     def setUp(self):
         self.root = tk.Tk()
+        self.root.iconify()
         self.pump_events()
 
     def tearDown(self):
