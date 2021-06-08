@@ -30,6 +30,7 @@ class StatisticsWindow(tk.Toplevel):
         self.font = font.Font(font=('Lucida Sans', 12, 'normal'))
         self.raw_data = raw_data
         self.data_type = data_type
+        self.is_valid = self.validate_data()
         self.plot_changed = False
         self.widgets = {}
         self.titles = {
@@ -39,8 +40,9 @@ class StatisticsWindow(tk.Toplevel):
         }
         self._create_widgets()
         self._collect_data()
-        # config_widget(self)
         self._draw()
+        if not self.is_valid:
+            self.destroy()
 
     def _create_widgets(self):
         """Create all widgets of statistic window."""
@@ -70,6 +72,8 @@ class StatisticsWindow(tk.Toplevel):
 
     def _draw(self):
         """Draw default statistics from data."""
+        if not self.is_valid:
+            return
         self.plot(0, self.data_by_category, x='category', y='amount', title=self.titles['category'])
         self.plot(1, self.data_by_date, x='date', y='amount', title=self.titles['date'])
 
@@ -82,6 +86,8 @@ class StatisticsWindow(tk.Toplevel):
             'month': _('month')
         }
         self.columns = columns
+        if not self.is_valid:
+            return
         if self.data_type == 'month':
             self.data = []
             for category in self.raw_data.categories:
@@ -168,12 +174,14 @@ class StatisticsWindow(tk.Toplevel):
 
     def resize_plot(self, canvas_id):
         """Resize callback for canvas widgets."""
+
         def _resize_image(event):
             widget = self.widgets[canvas_id]
             widget['canvas'].config(width=event.width, height=event.height)
             image = widget['img'].resize((event.width, event.height))
             widget['tk_img'] = PIL.ImageTk.PhotoImage(image)
             widget['canvas'].itemconfig(widget['widget_img'], image=widget['tk_img'])
+
         return _resize_image
 
     def show_yearly_stats(self):
@@ -190,6 +198,18 @@ class StatisticsWindow(tk.Toplevel):
             self._collect_data()
             self.plot_changed = True
             self._draw()
+
+    def validate_data(self):
+        """Validate input data."""
+        if self.data_type == 'month':
+            for category in self.raw_data.categories:
+                if len(self.raw_data.categories[category].fields) > 0:
+                    return True
+        else:
+            if len(self.raw_data.fields) > 0:
+                return True
+        tk.messagebox.showwarning('Error', 'No data to plot')
+        return False
 
     @staticmethod
     def show_values_on_bars(ax):
