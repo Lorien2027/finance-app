@@ -12,7 +12,7 @@ Welcome to Finance app's documentation!
 
    application
    month_window
-   statistics
+   statistic_window
    utils
 
 
